@@ -39,8 +39,8 @@ int no_of_cities;
 // Helper functions
 void assign()
 {
+    // code remaining
     no_of_cities = 10;
-    cout << "assigned";
 }
 
 int to_minutes(TIME t)
@@ -146,7 +146,7 @@ int travel_by_road(int dst, TIME required_at_time)
     int time_taken = 0;
     time_taken = Dijkistra(dst);
     int _from = to_minutes(required_at_time);
-    int _to = time_taken + _from;
+    int _to = (time_taken + _from) % 1440;
     bool is_available = true;
     is_available = check_availability(_from, _to);
     if (is_available)
@@ -174,6 +174,11 @@ int main()
     required_at_time.hr = 3;
     required_at_time.min = 53;
     int choice = 3;
+    cout << "1.)Pipeline" << endl
+         << "2.)Tanker" << endl
+         << "3.)we just need water" << endl;
+    cout << "enter your preffered choice for supply..." << endl;
+    cin >> choice;
     // 1->pipes;
     // 2->tankers;
     int ans = supply_water(choice, dst, required_amount, required_at_time);
