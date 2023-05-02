@@ -1,9 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <climits>
+#include <climits> //for INT_MAX
+#include <math.h>  //for Ceil
 using namespace std;
 
+// Structures,Classes,Variables used...
 class TIME
 {
 public:
@@ -20,25 +22,33 @@ public:
     }
 };
 
-class drivers
+class driver
 {
 public:
     string name;
     int age;
     vector<int> schedule;
-    drivers() {}
-    drivers(string _name, int _age, vector<int> _schedule) {}
-};
+    driver() {}
+    driver(string _name, int _age, vector<int> _schedule) {}
+} drivers[10];
 
-vector<vector<int>> cities;
+vector<vector<int>> cities; // stores flow per minute
 vector<int> srcs;
 int no_of_cities;
 
+// Helper functions
 void assign()
 {
+    no_of_cities = 10;
     cout << "assigned";
 }
 
+int to_minutes(TIME t)
+{
+    return t.hr * 60 + t.min;
+}
+
+// Algorithms
 int Edmond_Karp(int dst)
 {
     // assigning a dummy graph
@@ -112,26 +122,66 @@ int Edmond_Karp(int dst)
     return ans;
 }
 
-int networkflow(int dst, int requiredflow)
+int Dijkistra(int dst)
 {
-    int flow_per_hour = Edmond_Karp(dst);
-    cout << flow_per_hour << endl;
+    // code remaining
+    return 0;
+}
+bool check_availability(int a, int b)
+{
+    // code remaining
+    return true;
 }
 
+// So_called operations....
+int pipeflow(int dst, int requiredflow)
+{
+    int flow_per_minute = Edmond_Karp(dst);
+    int time_taken = ceil(1.0 * requiredflow / flow_per_minute);
+    return time_taken;
+}
+
+int travel_by_road(int dst, TIME required_at_time)
+{
+    int time_taken = 0;
+    time_taken = Dijkistra(dst);
+    int _from = to_minutes(required_at_time);
+    int _to = time_taken + _from;
+    bool is_available = true;
+    is_available = check_availability(_from, _to);
+    if (is_available)
+        return time_taken;
+    return INT_MAX;
+}
+
+// Our Job
+int supply_water(int choice, int dst, int required_amount, TIME required_at_time)
+{
+    int time_by_pipes = pipeflow(dst, required_amount);
+    int time_by_tanker = travel_by_road(dst, required_at_time);
+    if (choice == 1)
+        time_by_tanker = INT_MAX;
+    if (choice == 2)
+        time_by_pipes = INT_MAX;
+    return min(time_by_pipes, time_by_tanker);
+}
 int main()
 {
     assign();
     int dst = 2;
-    int requiredamount = 35;
-    TIME req;
-    req.hr = 3;
-    req.min = 53;
-    bool pref = 1;
-    int choice;
+    int required_amount = 35;
+    TIME required_at_time;
+    required_at_time.hr = 3;
+    required_at_time.min = 53;
+    int choice = 3;
     // 1->pipes;
     // 2->tankers;
-    choice = 1;
-    int time_by_pipes = networkflow(dst, requiredamount);
-    int time_by_tanker = 0;
+    int ans = supply_water(choice, dst, required_amount, required_at_time);
+    if (ans == INT_MAX)
+        cout << "Sorry!!!" << endl
+             << "We cant supply water to you with your preffered choice currenty...";
+    else
+        cout << "Total time required to supply water to your dst is: " << ans;
+    cout << endl;
     return 0;
 }
