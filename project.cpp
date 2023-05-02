@@ -32,7 +32,8 @@ public:
     driver(string _name, int _age, vector<int> _schedule) {}
 } drivers[10];
 
-vector<vector<int>> cities; // stores flow per minute
+vector<vector<int>> cities;   // stores flow per minute
+vector<vector<int>> road_map; // stores time taken to travel between two cities using tanker
 vector<int> srcs;
 int no_of_cities;
 
@@ -47,6 +48,15 @@ int to_minutes(TIME t)
 {
     return t.hr * 60 + t.min;
 }
+
+class cmp
+{
+public:
+    bool operator()(pair<int, int> *a, pair<int, int> *b)
+    {
+        return a->second > b->second;
+    }
+};
 
 // Algorithms
 int Edmond_Karp(int dst)
@@ -122,11 +132,71 @@ int Edmond_Karp(int dst)
     return ans;
 }
 
+int DIJKISTRA(int src, int dst)
+{
+    // declaring required things
+    int n = no_of_cities;
+    vector<bool> visited(n, 0);
+
+    // in below heap:
+    // pair's first value is node
+    // second value is curent distance of that node from src
+    priority_queue<pair<int, int> *, vector<pair<int, int> *>, cmp> q;
+
+    // hash table
+    vector<pair<int, int> *> hash(n, NULL);
+
+    // distance vector
+    vector<int> dis(n, INT_MAX);
+    dis[src] = 0;
+
+    // giving values in heap and hash table
+    for (int i = 0; i < n; i++)
+    {
+        pair<int, int> *x = new pair<int, int>;
+        *x = make_pair(i, dis[i]);
+        q.push(x);
+        hash[i] = x;
+    }
+    //
+
+    // starting operation
+    for (int k = 1; k <= n; k++)
+    {
+        // finding minimum element in heap
+        pair<int, int> *x = q.top();
+        int i = x->first;
+        int d = x->second;
+        if (d == INT_MAX)
+            return dis[dst];
+        dis[i] = d;
+        visited[i] = 1;
+
+        // applying algorithm
+        for (int j = 0; j < n; j++)
+        {
+            if (!visited[j] && road_map[i][j] != 0)
+            {
+                pair<int, int> *p = hash[j];
+                if (d + road_map[i][j] < p->second)
+                {
+                    p->second = road_map[i][j] + d;
+                }
+            }
+        }
+        q.pop();
+    }
+    return dis[dst];
+}
+
 int Dijkistra(int dst)
 {
-    // code remaining
-    return 0;
+    int time_taken = INT_MAX;
+    for (auto it : srcs)
+        time_taken = min(time_taken, DIJKISTRA(it, dst));
+    return time_taken;
 }
+
 bool check_availability(int a, int b)
 {
     // code remaining
