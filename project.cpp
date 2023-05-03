@@ -127,6 +127,81 @@ void city()
     city_names.insert("lahore", 10);
     no_of_cities = city_names.count;
 }
+void roads()
+{
+    int n = no_of_cities;
+    vector<int> temp;
+    for (int j = 0; j < n; j++)
+        temp.push_back(0);
+    for (int i = 0; i < n; i++)
+    {
+        road_map.push_back(temp);
+    }
+    road_map[0][7] = 54;
+    road_map[0][8] = 43;
+    road_map[1][2] = 53;
+    road_map[1][8] = 98;
+    road_map[2][1] = 53;
+    road_map[2][3] = 43;
+    road_map[2][8] = 70;
+    road_map[2][9] = 149;
+    road_map[3][2] = 43;
+    road_map[3][4] = 45;
+    road_map[4][3] = 45;
+    road_map[4][5] = 72;
+    road_map[4][9] = 173;
+    road_map[4][10] = 51;
+    road_map[5][4] = 72;
+    road_map[5][10] = 59;
+    road_map[6][7] = 48;
+    road_map[6][10] = 68;
+    road_map[7][0] = 54;
+    road_map[7][6] = 48;
+    road_map[7][8] = 59;
+    road_map[8][0] = 43;
+    road_map[8][1] = 98;
+    road_map[8][2] = 70;
+    road_map[8][7] = 59;
+    road_map[8][9] = 152;
+    road_map[8][10] = 47;
+    road_map[9][2] = 149;
+    road_map[9][4] = 173;
+    road_map[9][8] = 152;
+    road_map[10][4] = 51;
+    road_map[10][5] = 59;
+    road_map[10][6] = 68;
+    road_map[10][8] = 47;
+}
+void pipes()
+{
+    int n = no_of_cities;
+    vector<int> temp;
+    for (int j = 0; j < n; j++)
+        temp.push_back(0);
+    for (int i = 0; i < n; i++)
+    {
+        cities.push_back(temp);
+    }
+    cities[0][1] = 150;
+    cities[0][7] = 100;
+    cities[0][8] = 176;
+    cities[1][2] = 78;
+    cities[2][3] = 52;
+    cities[2][8] = 43;
+    cities[3][4] = 89;
+    cities[5][6] = 200;
+    cities[5][8] = 80;
+    cities[5][10] = 340;
+    cities[7][8] = 160;
+    cities[8][6] = 76;
+    cities[8][10] = 97;
+    cities[9][2] = 200;
+    cities[9][3] = 300;
+    cities[9][8] = 190;
+    cities[9][10] = 210;
+    cities[10][4] = 275;
+}
+
 void drivers_details()
 {
     vector<int> temp(24, 0);
