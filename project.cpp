@@ -235,6 +235,7 @@ int supply_water(int choice, int dst, int required_amount, TIME required_at_time
         time_by_pipes = INT_MAX;
     return min(time_by_pipes, time_by_tanker);
 }
+
 int main()
 {
     assign();
@@ -252,8 +253,6 @@ int main()
          << "3.)we just need water" << endl;
     cout << "enter your preffered choice for supply..." << endl;
     cin >> choice;
-    // 1->pipes;
-    // 2->tankers;
     int ans = supply_water(choice, dst, required_amount, required_at_time);
     if (ans == INT_MAX)
         cout << "Sorry!!!" << endl
