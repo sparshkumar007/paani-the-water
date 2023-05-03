@@ -91,7 +91,18 @@ public:
     int age;
     vector<int> schedule;
     driver() {}
-    driver(string _name, int _age, vector<int> _schedule) {}
+    void insert(string _name, int _age, vector<int> _schedule)
+    {
+        name = _name;
+        age = _age;
+        schedule = _schedule;
+    }
+    void print()
+    {
+        cout << name << endl;
+        cout << "Age: " << age << endl;
+        cout << endl;
+    }
 } drivers[10];
 
 vector<vector<int>> cities;   // stores flow per minute
@@ -116,30 +127,61 @@ void city()
     city_names.insert("lahore", 10);
     no_of_cities = city_names.count;
 }
-void roads()
-{
-    int n = no_of_cities;
-    for (int i = 0; i < n; i++)
-    {
-        vector<int> temp;
-        for (int j = 0; j < n; j++)
-            temp.push_back(0);
-        road_map.push_back(temp);
-    }
-}
-void pipes()
-{
-    int n = no_of_cities;
-    for (int i = 0; i < n; i++)
-    {
-        vector<int> temp;
-        for (int j = 0; j < n; j++)
-            temp.push_back(0);
-        cities.push_back(temp);
-    }
-}
 void drivers_details()
 {
+    vector<int> temp(24, 0);
+    vector<vector<int>> s(10, temp);
+    s[0][0] = 1;
+    s[0][3] = 1;
+    s[0][6] = 1;
+    s[0][7] = 1;
+    s[0][8] = 1;
+    s[0][9] = 1;
+    s[0][20] = 1;
+    s[0][23] = 1;
+    s[1][1] = 1;
+    s[1][4] = 1;
+    s[1][5] = 1;
+    s[1][13] = 1;
+    s[1][14] = 1;
+    s[1][15] = 1;
+    s[1][16] = 1;
+    s[2][1] = 1;
+    s[2][2] = 1;
+    s[2][3] = 1;
+    s[2][4] = 1;
+    s[2][23] = 1;
+    s[2][0] = 1;
+    s[3][11] = 1;
+    s[3][12] = 1;
+    s[3][13] = 1;
+    s[3][14] = 1;
+    s[4][20] = 1;
+    s[4][21] = 1;
+    s[4][22] = 1;
+    s[4][23] = 1;
+    s[5][5] = 1;
+    s[5][6] = 1;
+    s[5][15] = 1;
+    s[5][16] = 1;
+    s[6][17] = 1;
+    s[7][15] = 1;
+    s[8][10] = 1;
+    s[9][16] = 1;
+    s[9][17] = 1;
+    s[9][18] = 1;
+    s[9][19] = 1;
+    s[9][20] = 1;
+    drivers[0].insert("RAHUL KALRA", 29, s[0]);
+    drivers[1].insert("ADI", 19, s[1]);
+    drivers[2].insert("ANOOBIE", 69, s[2]);
+    drivers[3].insert("NORMIE", 98, s[3]);
+    drivers[4].insert("AKASHI", 35, s[4]);
+    drivers[5].insert("BARBARIQ ALI KHAN", 19, s[5]);
+    drivers[6].insert("AKSHIT: THE LAST AIR BENDER", 2, s[6]);
+    drivers[7].insert("BALMUKUND MEENA", 11, s[7]);
+    drivers[8].insert("DEVANSH", 33, s[8]);
+    drivers[9].insert("PANDIT GANGADHAR VIDHYADHAR MAYADHAR OMKARNATH SHASTRI", 298, s[9]);
 }
 void assign()
 {
