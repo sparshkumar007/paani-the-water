@@ -6,6 +6,59 @@
 using namespace std;
 
 // Structures,Classes,Variables used...
+class node
+{
+public:
+    bool terminal;
+    int data;
+    node **next;
+    node()
+    {
+        terminal = 0;
+        data = -1;
+        next = new node *[26];
+    }
+};
+
+class TRIE
+{
+public:
+    node *root;
+    TRIE()
+    {
+        root = NULL;
+    }
+    void insert(string s, int _data)
+    {
+        node *temp = root;
+        int i = 0;
+        int n = s.size();
+        while (temp != NULL && i < n)
+        {
+            temp = temp->next[s[i++] - 'a'];
+        }
+        while (i < n)
+        {
+            node *newnode = new node;
+            temp->next[s[i++] - 'a'] = newnode;
+            temp = newnode;
+        }
+        temp->terminal = 1;
+        temp->data = _data;
+    }
+    int search(string s)
+    {
+        node *temp = root;
+        int i = 0;
+        int n = s.size();
+        while (temp != NULL && i < n)
+        {
+            temp = temp->next[s[i++] - 'a'];
+        }
+        return temp->data;
+    }
+};
+
 class TIME
 {
 public:
@@ -34,6 +87,7 @@ public:
 
 vector<vector<int>> cities;   // stores flow per minute
 vector<vector<int>> road_map; // stores time taken to travel between two cities using tanker
+TRIE city_names;
 vector<int> srcs;
 int no_of_cities;
 
@@ -41,6 +95,10 @@ int no_of_cities;
 void assign()
 {
     // code remaining
+    // insert drivers
+    // insert pipeline_map
+    // insert road_map
+    // insert city_names
     no_of_cities = 10;
 }
 
@@ -199,7 +257,6 @@ int Dijkistra(int dst)
 
 bool check_availability(int a, int b)
 {
-    // code remaining
     int from = a / 60;
     int to = b / 60;
     vector<int> times;
@@ -270,20 +327,56 @@ int supply_water(int choice, int dst, int required_amount, TIME required_at_time
 int main()
 {
     assign();
-    int dst = 2;
-    int required_amount = 35;
+    int dst;
+    int required_amount;
     TIME required_at_time;
-    required_at_time.hr = 3;
-    required_at_time.min = 53;
-
-    // name searching part is remaning
-
+    string s;
+    cout << "Enter name of city you want water supply: ";
+    cin >> s;
+    dst = city_names.search(s);
+    while (dst == -1)
+    {
+        cout << "Sorry!!!" << endl
+             << "I guess you have entered wrong name." << endl
+             << "Please reEnter the city name: ";
+    }
+    cout << "OK...Got it" << endl
+         << "Now how much PANI do you need" << endl
+         << "(please enter in Litre)" << endl
+         << "Amount: ";
+    cin >> required_amount;
+    cout << "OK..." << endl
+         << "Now just tell us when do you need your supply.." << endl
+         << "Hour: ";
+    cin >> required_at_time.hr;
+    while (required_at_time.hr > 23 || required_at_time.hr < 0)
+    {
+        cout << "Please enter valid hrs(0 to 23)" << endl;
+        cout << "Hour: ";
+        cin >> required_at_time.hr;
+    }
+    cout << "Minute: ";
+    cin >> required_at_time.min;
+    while (required_at_time.min > 59 || required_at_time.min < 0)
+    {
+        cout << "Please enter valid mins(0 to 59)" << endl;
+        cout << "Minute: ";
+        cin >> required_at_time.min;
+    }
     int choice = 3;
     cout << "1.)Pipeline" << endl
          << "2.)Tanker" << endl
          << "3.)we just need water" << endl;
     cout << "enter your preffered choice for supply..." << endl;
     cin >> choice;
+    while (choice > 3 || choice < 1)
+    {
+        cout << "Please enter right choice: ";
+        cin >> choice;
+    }
+    cout << "Ok we got your request." << endl;
+    cout << "Please wait few seconds....";
+    cout << "OK Done." << endl;
     int ans = supply_water(choice, dst, required_amount, required_at_time);
     if (ans == INT_MAX)
         cout << "Sorry!!!" << endl
