@@ -1,8 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits> //for INT_MAX
-#include <math.h>  //for Ceil
+#include <bits/stdc++.h>
 using namespace std;
 
 // Structures,Classes,Variables used...
@@ -200,7 +196,38 @@ int Dijkistra(int dst)
 bool check_availability(int a, int b)
 {
     // code remaining
-    return true;
+    int from = a / 60;
+    int to = b / 60;
+    vector<int> times;
+    if (from < to)
+    {
+        while (from != to)
+            times.push_back(from++);
+        times.push_back(to);
+    }
+    else
+    {
+        while (from != to)
+            times.push_back((from++) % 24);
+        times.push_back(to);
+    }
+    for (int i = 0; i < 10; i++)
+    {
+        int k = 1;
+        for (int j = 0; j < times.size(); j++)
+        {
+            if (drivers[i].schedule[times[j]] == 0)
+            {
+                k = 0;
+                break;
+            }
+        }
+        if (k)
+            return true;
+        else
+            k = 1;
+    }
+    return false;
 }
 
 // So_called operations....
