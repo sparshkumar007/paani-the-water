@@ -17,6 +17,8 @@ public:
         terminal = 0;
         data = -1;
         next = new node *[26];
+        for (int i = 0; i < 26; i++)
+            next[i] = NULL;
     }
 };
 
@@ -24,38 +26,45 @@ class TRIE
 {
 public:
     node *root;
+    int count;
     TRIE()
     {
-        root = NULL;
+        root = new node();
+        count = 0;
     }
-    void insert(string s, int _data)
+    void insert(string word, int _data)
     {
-        node *temp = root;
         int i = 0;
-        int n = s.size();
-        while (temp != NULL && i < n)
+        node *it = root;
+        while (i < word.size())
         {
-            temp = temp->next[s[i++] - 'a'];
+            if (it->next[word[i] - 'a'] == NULL)
+            {
+                it->next[word[i] - 'a'] = new node();
+            }
+            it = it->next[word[i] - 'a'];
+            i++;
         }
-        while (i < n)
-        {
-            node *newnode = new node;
-            temp->next[s[i++] - 'a'] = newnode;
-            temp = newnode;
-        }
-        temp->terminal = 1;
-        temp->data = _data;
+        it->terminal = true;
+        it->data = _data;
+        count++;
     }
-    int search(string s)
+    bool search(string word)
     {
-        node *temp = root;
+        node *it = root;
         int i = 0;
-        int n = s.size();
-        while (temp != NULL && i < n)
+        while (i < word.size())
         {
-            temp = temp->next[s[i++] - 'a'];
+            if (it->next[word[i] - 'a'] == NULL)
+            {
+                return false;
+            }
+            it = it->next[word[i] - 'a'];
+            i++;
         }
-        return temp->data;
+        if (it->terminal == true)
+            return true;
+        return false;
     }
 };
 
@@ -92,14 +101,52 @@ vector<int> srcs;
 int no_of_cities;
 
 // Helper functions
+void city()
+{
+    city_names.insert("noida", 0);
+    city_names.insert("ghaziabad", 1);
+    city_names.insert("delhi", 2);
+    city_names.insert("faridabad", 3);
+    city_names.insert("gurugram", 4);
+    city_names.insert("meerut", 5);
+    city_names.insert("saharanpur", 6);
+    city_names.insert("muzzafarnagar", 7);
+    city_names.insert("bijnor", 8);
+    city_names.insert("chennai", 9);
+    city_names.insert("lahore", 10);
+    no_of_cities = city_names.count;
+}
+void roads()
+{
+    int n = no_of_cities;
+    for (int i = 0; i < n; i++)
+    {
+        vector<int> temp;
+        for (int j = 0; j < n; j++)
+            temp.push_back(0);
+        road_map.push_back(temp);
+    }
+}
+void pipes()
+{
+    int n = no_of_cities;
+    for (int i = 0; i < n; i++)
+    {
+        vector<int> temp;
+        for (int j = 0; j < n; j++)
+            temp.push_back(0);
+        cities.push_back(temp);
+    }
+}
+void drivers_details()
+{
+}
 void assign()
 {
-    // code remaining
-    // insert drivers
-    // insert pipeline_map
-    // insert road_map
-    // insert city_names
-    no_of_cities = 10;
+    city();
+    pipes();
+    roads();
+    drivers_details();
 }
 
 int to_minutes(TIME t)
