@@ -396,8 +396,6 @@ int Dijkistra(int dst)
     int time_taken = INT_MAX;
     for (auto it : srcs)
     {
-        cout << it << " " << dst << endl;
-        cout << DIJKISTRA(it, dst) << endl;
         time_taken = min(time_taken, DIJKISTRA(it, dst));
     }
     return time_taken;
@@ -451,8 +449,8 @@ int travel_by_road(int dst, TIME required_at_time)
 {
     int time_taken = 0;
     time_taken = Dijkistra(dst);
-    int _from = to_minutes(required_at_time);
-    int _to = (time_taken + _from) % 1440;
+    int _from = (to_minutes(required_at_time) - time_taken) % 1440;
+    int _to = (to_minutes(required_at_time) + time_taken) % 1440;
     bool is_available = true;
     is_available = check_availability(_from, _to);
     if (is_available)
