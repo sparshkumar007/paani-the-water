@@ -26,6 +26,7 @@ class TRIE
 {
 public:
     node *root;
+    int data;
     int count;
     TRIE()
     {
@@ -49,7 +50,7 @@ public:
         it->data = _data;
         count++;
     }
-    bool search(string word)
+    int search(string word)
     {
         node *it = root;
         int i = 0;
@@ -57,14 +58,14 @@ public:
         {
             if (it->next[word[i] - 'a'] == NULL)
             {
-                return false;
+                return -1;
             }
             it = it->next[word[i] - 'a'];
             i++;
         }
         if (it->terminal == true)
-            return true;
-        return false;
+            return it->data;
+        return -1;
     }
 };
 
@@ -126,6 +127,9 @@ void city()
     city_names.insert("chennai", 9);
     city_names.insert("lahore", 10);
     no_of_cities = city_names.count;
+    srcs.push_back(0);
+    srcs.push_back(5);
+    srcs.push_back(9);
 }
 void roads()
 {
@@ -315,7 +319,7 @@ int Edmond_Karp(int dst)
             {
                 if (dummy[y][i] && !visited[i])
                 {
-                    q.push(make_pair(y, i));
+                    q.push(make_pair(i, y));
                     visited[i] = 1;
                 }
             }
@@ -327,10 +331,10 @@ int Edmond_Karp(int dst)
             vector<int> path;
             int x = 0;
             int y = dst;
-            while (x != -2)
+            while (y != -2)
             {
-                path.push_back(x);
-                x = parent[y];
+                path.push_back(y);
+                y = parent[y];
             }
 
             // calculating flow from the path.
@@ -353,69 +357,49 @@ int Edmond_Karp(int dst)
     }
     return ans;
 }
-
 int DIJKISTRA(int src, int dst)
 {
-    // declaring required things
     int n = no_of_cities;
     vector<bool> visited(n, 0);
-
-    // in below heap:
-    // pair's first value is node
-    // second value is curent distance of that node from src
-    priority_queue<pair<int, int> *, vector<pair<int, int> *>, cmp> q;
-
-    // hash table
-    vector<pair<int, int> *> hash(n, NULL);
-
-    // distance vector
-    vector<int> dis(n, INT_MAX);
-    dis[src] = 0;
-
-    // giving values in heap and hash table
+    vector<int> dist(n, INT_MAX);
+    dist[src] = 0;
     for (int i = 0; i < n; i++)
     {
-        pair<int, int> *x = new pair<int, int>;
-        *x = make_pair(i, dis[i]);
-        q.push(x);
-        hash[i] = x;
-    }
-    //
-
-    // starting operation
-    for (int k = 1; k <= n; k++)
-    {
-        // finding minimum element in heap
-        pair<int, int> *x = q.top();
-        int i = x->first;
-        int d = x->second;
-        if (d == INT_MAX)
-            return dis[dst];
-        dis[i] = d;
-        visited[i] = 1;
-
-        // applying algorithm
+        int x = -1;
+        int m = INT_MAX;
         for (int j = 0; j < n; j++)
         {
-            if (!visited[j] && road_map[i][j] != 0)
+            if (!visited[j] && m > dist[j])
             {
-                pair<int, int> *p = hash[j];
-                if (d + road_map[i][j] < p->second)
-                {
-                    p->second = road_map[i][j] + d;
-                }
+                m = dist[j];
+                x = j;
             }
         }
-        q.pop();
+        if (x == -1)
+            return INT_MAX;
+        if (x == dst)
+            return dist[dst];
+        visited[x] = 1;
+        for (int j = 0; j < n; j++)
+        {
+            if (!visited[j] && dist[j] > dist[x] + road_map[x][j] && road_map[x][j] != 0)
+            {
+                dist[j] = road_map[x][j] + dist[x];
+            }
+        }
     }
-    return dis[dst];
+    return dist[dst];
 }
 
 int Dijkistra(int dst)
 {
     int time_taken = INT_MAX;
     for (auto it : srcs)
+    {
+        cout << it << " " << dst << endl;
+        cout << DIJKISTRA(it, dst) << endl;
         time_taken = min(time_taken, DIJKISTRA(it, dst));
+    }
     return time_taken;
 }
 
@@ -503,6 +487,8 @@ int main()
         cout << "Sorry!!!" << endl
              << "I guess you have entered wrong name." << endl
              << "Please reEnter the city name: ";
+        cin >> s;
+        dst = city_names.search(s);
     }
     cout << "OK...Got it" << endl
          << "Now how much PANI do you need" << endl
@@ -541,7 +527,7 @@ int main()
     cout << "Ok we got your request." << endl;
     cout << "Please wait few seconds....";
     cout << "OK Done." << endl;
-    int ans = supply_water(choice, dst, required_amount, required_at_time);
+    int ans = supply_water(choice, dst, required_amount * 1000, required_at_time);
     if (ans == INT_MAX)
         cout << "Sorry!!!" << endl
              << "We cant supply water to you with your preffered choice currenty...";
