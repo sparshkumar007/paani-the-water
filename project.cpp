@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <climits> //INT_MAX
-#include <math.h>  //CEIL
+#include <climits>  //INT_MAX
+#include <math.h>   //CEIL
+#include <stdlib.h> //CLEAR
 using namespace std;
 
 // Structures,Classes,Variables used...
@@ -488,11 +489,13 @@ int main()
         cin >> s;
         dst = city_names.search(s);
     }
+    system("CLS");
     cout << "OK...Got it" << endl
          << "Now how much PANI do you need" << endl
          << "(please enter in Litre)" << endl
          << "Amount: ";
     cin >> required_amount;
+    system("CLS");
     cout << "OK..." << endl
          << "Now just tell us when do you need your supply.." << endl
          << "Hour: ";
@@ -511,6 +514,7 @@ int main()
         cout << "Minute: ";
         cin >> required_at_time.min;
     }
+    system("CLS");
     int choice = 3;
     cout << "1.)Pipeline" << endl
          << "2.)Tanker" << endl
@@ -522,8 +526,20 @@ int main()
         cout << "Please enter right choice: ";
         cin >> choice;
     }
+    system("CLS");
     cout << "Ok we got your request." << endl;
-    cout << "Please wait few seconds....";
+    cout << "Please wait for few seconds...." << endl;
+    for (int k = 1; k <= 3; k++)
+    {
+        cout << ".";
+        for (int i = 1; i <= 10000; i++)
+        {
+            for (int j = 1; j <= 10000; j++)
+            {
+            }
+        }
+    }
+    system("CLS");
     cout << "OK Done." << endl;
     int ans = supply_water(choice, dst, required_amount * 1000, required_at_time);
     if (ans == INT_MAX)
