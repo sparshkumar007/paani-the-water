@@ -529,7 +529,7 @@ int main()
     system("CLS");
     cout << "Ok we got your request." << endl;
     cout << "Please wait for few seconds...." << endl;
-    for (int k = 1; k <= 3; k++)
+    for (int k = 1; k <= 5; k++)
     {
         cout << ".";
         for (int i = 1; i <= 10000; i++)
